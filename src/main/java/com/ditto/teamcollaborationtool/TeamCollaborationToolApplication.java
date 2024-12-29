@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TeamCollaborationToolApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TeamCollaborationToolApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TeamCollaborationToolApplication.class, args);
+    }
 
 }
