@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "tasks")
 public class Task {
 
@@ -32,6 +30,16 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public Task() {}
+
+    public Task(Long id, String name, String description, LocalDate dueDate, String status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.status = status;
+    }
 
     public Long getId() {
         return id;

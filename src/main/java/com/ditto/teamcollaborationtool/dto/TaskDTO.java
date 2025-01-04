@@ -5,14 +5,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class TaskDTO {
     private Long id;
     private String name;
     private String description;
     private LocalDate dueDate;
     private String status;
+
+    public TaskDTO() {}
+
+    public TaskDTO(Long id, String name, String description, LocalDate dueDate, String status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.status = status;
+    }
 
     public Long getId() {
         return id;

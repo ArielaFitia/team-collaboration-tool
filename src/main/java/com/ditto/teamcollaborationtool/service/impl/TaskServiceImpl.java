@@ -51,6 +51,7 @@ public class TaskServiceImpl implements TaskService {
         task.setDescription(taskDTO.getDescription());
         task.setDueDate(taskDTO.getDueDate());
         task.setStatus(taskDTO.getStatus());
+        task = taskRepository.save(task);
         return modelMapper.map(task, TaskDTO.class);
     }
 

@@ -6,14 +6,22 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class ProjectDTO {
     private Long id;
     private String name;
     private String status;
     private String description;
     private List<TaskDTO> tasks; // Optional nesting
+
+    public ProjectDTO() {}
+
+    public ProjectDTO(Long id, String name, String status, String description) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.description = description;
+    }
 
     public Long getId() {
         return id;
