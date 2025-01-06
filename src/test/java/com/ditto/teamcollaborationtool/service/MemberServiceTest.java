@@ -2,7 +2,9 @@ package com.ditto.teamcollaborationtool.service;
 
 import com.ditto.teamcollaborationtool.dto.MemberDTO;
 import com.ditto.teamcollaborationtool.model.Member;
+import com.ditto.teamcollaborationtool.model.Task;
 import com.ditto.teamcollaborationtool.repository.MemberRepository;
+import com.ditto.teamcollaborationtool.repository.TaskRepository;
 import com.ditto.teamcollaborationtool.service.impl.MemberServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,9 @@ public class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Mock
+    private TaskRepository taskRepository;
+
+    @Mock
     private ModelMapper modelMapper;
 
     @InjectMocks
@@ -35,11 +40,16 @@ public class MemberServiceTest {
 
     private Member member;
     private MemberDTO memberDTO;
+    private Task task;
 
     @BeforeEach
     void setUp() {
         member = new Member(1L, "Member A", "Member A email", "software engineer");
         memberDTO = new MemberDTO(1L, "Member A", "Member A email", "software engineer");
+
+        task = new Task();
+        task.setId(1L);
+        task.setName("Task A");
     }
 
     @Test
@@ -108,5 +118,38 @@ public class MemberServiceTest {
         memberService.deleteMember(1L);
 
         verify(memberRepository).deleteById(1L);
+    }
+
+    @Test
+    void addTaskToMember_ShouldReturnUpdatedMember() {
+        when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+        when(memberRepository.save(any(Member.class))).thenReturn(member);
+        when(modelMapper.map(member, MemberDTO.class)).thenReturn(memberDTO);
+
+        MemberDTO result = memberService.addTaskToMember(1L, 1L);
+
+        assertNotNull(result);
+        verify(memberRepository).save(member);
+        verify(taskRepository).save(task);
+    }
+
+    @Test
+    void removeTaskFromMember_ShouldReturnUpdatedMember() {
+        member.getTasks().add(task);
+        task.setMember(member);
+
+        when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+        when(memberRepository.save(any(Member.class))).thenReturn(member);
+        when(modelMapper.map(member, MemberDTO.class)).thenReturn(memberDTO);
+
+        MemberDTO result = memberService.removeTaskFromMember(1L, 1L);
+
+        assertNotNull(result);
+        verify(memberRepository).save(member);
+        verify(taskRepository).save(task);
     }
 }

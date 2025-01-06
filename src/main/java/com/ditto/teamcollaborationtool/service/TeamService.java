@@ -12,6 +12,6 @@ public interface TeamService {
     void deleteTeam(Long id);
     TeamDTO addMemberToTeam(Long teamId, Long memberId);
     TeamDTO removeMemberFromTeam(Long teamId, Long memberId);
-    TeamDTO addProjectsToTeam(Long teamId, Long projectId);
+    TeamDTO addProjectToTeam(Long teamId, Long projectId);
     TeamDTO removeProjectFromTeam(Long teamId, Long projectId);
 }

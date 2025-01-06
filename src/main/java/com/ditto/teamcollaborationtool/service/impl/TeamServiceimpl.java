@@ -100,7 +100,7 @@ public class TeamServiceimpl implements TeamService {
     }
 
     @Override
-    public TeamDTO addProjectsToTeam(Long teamId, Long projectId) {
+    public TeamDTO addProjectToTeam(Long teamId, Long projectId) {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team not found"));
         Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
 

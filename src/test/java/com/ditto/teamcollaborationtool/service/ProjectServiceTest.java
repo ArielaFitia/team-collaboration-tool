@@ -2,7 +2,9 @@ package com.ditto.teamcollaborationtool.service;
 
 import com.ditto.teamcollaborationtool.dto.ProjectDTO;
 import com.ditto.teamcollaborationtool.model.Project;
+import com.ditto.teamcollaborationtool.model.Task;
 import com.ditto.teamcollaborationtool.repository.ProjectRepository;
+import com.ditto.teamcollaborationtool.repository.TaskRepository;
 import com.ditto.teamcollaborationtool.service.impl.ProjectServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,9 @@ public class ProjectServiceTest {
     private ProjectRepository projectRepository;
 
     @Mock
+    private TaskRepository taskRepository;
+
+    @Mock
     private ModelMapper modelMapper;
 
     @InjectMocks
@@ -35,11 +40,16 @@ public class ProjectServiceTest {
 
     private Project project;
     private ProjectDTO projectDTO;
+    private Task task;
 
     @BeforeEach
     void setUp() {
         project = new Project(1L, "Project A", "completed", "Project A description");
         projectDTO = new ProjectDTO(1L, "Project A", "completed", "Project A description");
+
+        task = new Task();
+        task.setId(1L);
+        task.setName("Task A");
     }
 
     @Test
@@ -107,5 +117,38 @@ public class ProjectServiceTest {
         projectService.deleteProject(1L);
 
         verify(projectRepository).deleteById(1L);
+    }
+
+    @Test
+    void addTaskToProject_ShouldReturnUpdatedProject() {
+        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+        when(projectRepository.save(any(Project.class))).thenReturn(project);
+        when(modelMapper.map(project, ProjectDTO.class)).thenReturn(projectDTO);
+
+        ProjectDTO result = projectService.addTaskToProject(1L, 1L);
+
+        assertNotNull(result);
+        verify(projectRepository).save(project);
+        verify(taskRepository).save(task);
+    }
+
+    @Test
+    void removeTaskFromProject_ShouldReturnUpdatedProject() {
+        project.getTasks().add(task);
+        task.setProject(project);
+
+        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+        when(projectRepository.save(any(Project.class))).thenReturn(project);
+        when(modelMapper.map(project, ProjectDTO.class)).thenReturn(projectDTO);
+
+        ProjectDTO result = projectService.deleteTaskFromProject(1L, 1L);
+
+        assertNotNull(result);
+        verify(projectRepository).save(project);
+        verify(taskRepository).save(task);
     }
 }

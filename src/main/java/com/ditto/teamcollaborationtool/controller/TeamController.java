@@ -58,7 +58,7 @@ public class TeamController {
     @PostMapping("/{teamId}/projects/{projectId}")
     @ResponseStatus(HttpStatus.OK)
     public TeamDTO addProjectToTeam(@PathVariable Long teamId, @PathVariable Long projectId) {
-        return teamService.addProjectsToTeam(teamId, projectId);
+        return teamService.addProjectToTeam(teamId, projectId);
     }
 
     @DeleteMapping("/{teamId}/projects/{projectId}")
