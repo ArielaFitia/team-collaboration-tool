@@ -43,5 +43,16 @@ public class MemberController {
     public void deleteMember(@PathVariable Long id) {
         memberService.deleteMember(id);
     }
+
+    @PostMapping("/{memberId}/tasks/{taskId}")
+    @ResponseStatus(HttpStatus.OK)
+    public MemberDTO addTaskToMember(@PathVariable Long memberId, @PathVariable Long taskId) {
+        return memberService.addTaskToMember(memberId, taskId);
+    }
+
+    @DeleteMapping("/{memberId}/tasks/{taskId}")
+    public MemberDTO removeTaskFromMember(@PathVariable Long memberId, @PathVariable Long taskId) {
+        return memberService.removeTaskFromMember(memberId, taskId);
+    }
 }
 

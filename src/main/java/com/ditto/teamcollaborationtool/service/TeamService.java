@@ -10,4 +10,8 @@ public interface TeamService {
     List<TeamDTO> getAllTeams();
     TeamDTO updateTeam(Long id, TeamDTO teamDTO);
     void deleteTeam(Long id);
+    TeamDTO addMemberToTeam(Long teamId, Long memberId);
+    TeamDTO removeMemberFromTeam(Long teamId, Long memberId);
+    TeamDTO addProjectsToTeam(Long teamId, Long projectId);
+    TeamDTO removeProjectFromTeam(Long teamId, Long projectId);
 }

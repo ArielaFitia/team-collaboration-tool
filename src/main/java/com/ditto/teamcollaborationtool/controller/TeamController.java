@@ -43,4 +43,26 @@ public class TeamController {
     public void deleteTeam(@PathVariable Long id) {
         teamService.deleteTeam(id);
     }
+
+    @PostMapping("/{teamId}/members/{memberId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TeamDTO addMemberToTeam(@PathVariable Long teamId, @PathVariable Long memberId) {
+        return teamService.addMemberToTeam(teamId, memberId);
+    }
+
+    @DeleteMapping("/{teamId}/members/{memberId}")
+    public TeamDTO deleteMemberFromTeam(@PathVariable Long teamId, @PathVariable Long memberId) {
+        return teamService.removeMemberFromTeam(teamId, memberId);
+    }
+
+    @PostMapping("/{teamId}/projects/{projectId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TeamDTO addProjectToTeam(@PathVariable Long teamId, @PathVariable Long projectId) {
+        return teamService.addProjectsToTeam(teamId, projectId);
+    }
+
+    @DeleteMapping("/{teamId}/projects/{projectId}")
+    public TeamDTO deleteProjectFromTeam(@PathVariable Long teamId, @PathVariable Long projectId) {
+        return teamService.removeProjectFromTeam(teamId, projectId);
+    }
 }

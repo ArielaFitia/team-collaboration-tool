@@ -10,4 +10,6 @@ public interface ProjectService {
     List<ProjectDTO> getAllProjects();
     ProjectDTO updateProject(Long id, ProjectDTO projectDTO);
     void deleteProject(Long id);
+    ProjectDTO addTaskToProject(Long projectId, Long taskId);
+    ProjectDTO deleteTaskFromProject(Long projectId, Long taskId);
 }

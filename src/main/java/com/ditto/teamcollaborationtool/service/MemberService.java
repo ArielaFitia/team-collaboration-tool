@@ -10,4 +10,6 @@ public interface MemberService {
     List<MemberDTO> getAllMembers();
     MemberDTO updateMember(Long id, MemberDTO memberDTO);
     void deleteMember(Long id);
+    MemberDTO addTaskToMember(Long memberId, Long taskId);
+    MemberDTO removeTaskFromMember(Long memberId, Long taskId);
 }

@@ -43,5 +43,16 @@ public class ProjectController {
     public void deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);
     }
+
+    @PostMapping("{projectId}/tasks/{taskId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProjectDTO addTaskToProject(@PathVariable Long projectId, @PathVariable Long taskId) {
+        return projectService.addTaskToProject(projectId, taskId);
+    }
+
+    @DeleteMapping("{projectId}/tasks/{taskId}")
+    public ProjectDTO deleteTaskFromProject(@PathVariable Long projectId, @PathVariable Long taskId) {
+        return projectService.deleteTaskFromProject(projectId, taskId);
+    }
 }
 
