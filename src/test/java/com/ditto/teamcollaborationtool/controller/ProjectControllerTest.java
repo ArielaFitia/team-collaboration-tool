@@ -18,8 +18,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -106,5 +105,35 @@ public class ProjectControllerTest {
 
         mockMvc.perform(delete("/api/projects/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void whenAddTaskToProject_thenReturnUpdatedProject() throws Exception {
+        when(projectService.addTaskToProject(1L, 1L)).thenReturn(testProjectDTO);
+
+        mockMvc.perform(post("/api/projects/1/tasks/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testProjectDTO.getId()))
+                .andExpect(jsonPath("$.name").value(testProjectDTO.getName()))
+                .andExpect(jsonPath("$.status").value(testProjectDTO.getStatus()))
+                .andExpect(jsonPath("$.description").value(testProjectDTO.getDescription()));
+
+        verify(projectService).addTaskToProject(1L, 1L);
+    }
+
+    @Test
+    void whenDeleteTaskFromProject_thenReturnUpdatedProject() throws Exception {
+        when(projectService.deleteTaskFromProject(1L, 1L)).thenReturn(testProjectDTO);
+
+        mockMvc.perform(delete("/api/projects/1/tasks/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testProjectDTO.getId()))
+                .andExpect(jsonPath("$.name").value(testProjectDTO.getName()))
+                .andExpect(jsonPath("$.status").value(testProjectDTO.getStatus()))
+                .andExpect(jsonPath("$.description").value(testProjectDTO.getDescription()));
+
+        verify(projectService).deleteTaskFromProject(1L, 1L);
     }
 }

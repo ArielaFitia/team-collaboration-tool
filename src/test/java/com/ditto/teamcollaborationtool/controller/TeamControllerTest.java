@@ -18,8 +18,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -102,5 +101,60 @@ public class TeamControllerTest {
 
         mockMvc.perform(delete("/api/teams/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void whenAddMemberToTeam_thenReturnUpdatedTeam() throws Exception {
+        when(teamService.addMemberToTeam(1L, 1L)).thenReturn(testTeamDTO);
+
+        mockMvc.perform(post("/api/teams/1/members/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(testTeamDTO.getId()))
+                .andExpect(jsonPath("$.name").value(testTeamDTO.getName()))
+                .andExpect(jsonPath("$.description").value(testTeamDTO.getDescription()));
+
+        verify(teamService).addMemberToTeam(1L, 1L);
+    }
+
+    @Test
+    void whenDeleteMemberFromTeam_thenReturnUpdatedTeam() throws Exception {
+        when(teamService.removeMemberFromTeam(1L, 1L)).thenReturn(testTeamDTO);
+
+        mockMvc.perform(delete("/api/teams/1/members/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testTeamDTO.getId()))
+                .andExpect(jsonPath("$.name").value(testTeamDTO.getName()))
+                .andExpect(jsonPath("$.description").value(testTeamDTO.getDescription()));
+
+        verify(teamService).removeMemberFromTeam(1L, 1L);
+    }
+
+    @Test
+    void whenAddProjectToTeam_thenReturnUpdatedTeam() throws Exception {
+        when(teamService.addProjectToTeam(1L, 1L)).thenReturn(testTeamDTO);
+
+        mockMvc.perform(post("/api/teams/1/projects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testTeamDTO.getId()))
+                .andExpect(jsonPath("$.name").value(testTeamDTO.getName()))
+                .andExpect(jsonPath("$.description").value(testTeamDTO.getDescription()));
+
+        verify(teamService).addProjectToTeam(1L, 1L);
+    }
+
+    @Test
+    void whenDeleteProjectFromTeam_thenReturnUpdatedTeam() throws Exception {
+        when(teamService.removeProjectFromTeam(1L, 1L)).thenReturn(testTeamDTO);
+
+        mockMvc.perform(delete("/api/teams/1/projects/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testTeamDTO.getId()))
+                .andExpect(jsonPath("$.name").value(testTeamDTO.getName()))
+                .andExpect(jsonPath("$.description").value(testTeamDTO.getDescription()));
+
+        verify(teamService).removeProjectFromTeam(1L, 1L);
     }
 }

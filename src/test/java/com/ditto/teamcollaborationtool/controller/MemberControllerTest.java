@@ -18,8 +18,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -106,5 +105,35 @@ public class MemberControllerTest {
 
         mockMvc.perform(delete("/api/members/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void whenAddTaskToMember_thenReturnUpdatedMember() throws Exception {
+        when(memberService.addTaskToMember(1L, 1L)).thenReturn(testMemberDTO);
+
+        mockMvc.perform(post("/api/members/1/tasks/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testMemberDTO.getId()))
+                .andExpect(jsonPath("$.name").value(testMemberDTO.getName()))
+                .andExpect(jsonPath("$.email").value(testMemberDTO.getEmail()))
+                .andExpect(jsonPath("$.role").value(testMemberDTO.getRole()));
+
+        verify(memberService).addTaskToMember(1L, 1L);
+    }
+
+    @Test
+    void whenDeleteTaskFromMember_thenReturnUpdatedMember() throws Exception {
+        when(memberService.removeTaskFromMember(1L, 1L)).thenReturn(testMemberDTO);
+
+        mockMvc.perform(delete("/api/members/1/tasks/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testMemberDTO.getId()))
+                .andExpect(jsonPath("$.name").value(testMemberDTO.getName()))
+                .andExpect(jsonPath("$.email").value(testMemberDTO.getEmail()))
+                .andExpect(jsonPath("$.role").value(testMemberDTO.getRole()));
+
+        verify(memberService).removeTaskFromMember(1L, 1L);
     }
 }
